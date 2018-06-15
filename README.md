@@ -1,4 +1,4 @@
-# Trabajo Práctico del Taller de Álgebra I (Primer cuatrimestre de 2018).
+# Trabajo Práctico del Taller de Álgebra I (Primer cuatrimestre de 2018)
 
 ## Grupo 13:
 
