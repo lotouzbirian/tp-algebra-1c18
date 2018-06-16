@@ -126,6 +126,12 @@ posicionFinal [] = (1,1)
 posicionFinal c | length c == 1 = head c
                 | otherwise = posicionFinal (tail c)
 
+-- Determina si una lista de posiciones tiene elementos repetidos.
+hayRepetidos :: [Posicion] -> Bool
+hayRepetidos [] = False
+hayRepetidos (p:ps) | elem p ps = True
+                    | otherwise = hayRepetidos ps
+
 -- Determina si un camino se mantiene dentro de los límites del tablero a lo largo de su trayectoria,
 -- asumiendo que se comenzará por la posición (1,1).
 caminoValido :: CampoMinado -> Camino -> Bool
@@ -135,3 +141,8 @@ caminoValido cm c = sonTodasValidas cm (posiciones c)
 -- llega a la posición (n,n) sin pisar ninguna mina.
 caminoDeSalida :: CampoMinado -> Camino -> Bool
 caminoDeSalida cm c = caminoValido cm c && noExplota cm c && posicionFinal (posiciones c) == (tamano cm, tamano cm)
+
+-- Determina si un RAE, comenzando en la posición (1,1), al seguir el camino dado,
+-- llega a la posición (n,n) sin pisar ninguna mina y sin pasar dos veces por una misma posición.
+caminoDeSalidaSinRepetidos :: CampoMinado -> Camino -> Bool
+caminoDeSalidaSinRepetidos cm c = caminoDeSalida cm c && not(hayRepetidos (posiciones c))
