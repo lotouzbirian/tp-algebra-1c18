@@ -117,8 +117,8 @@ sonDisjuntas c1 c2 | length c1 == 0 = True
                    | otherwise = sonDisjuntas (tail c1) c2
 
 -- Determina si un RAE recorre un camino sin pisar ninguna mina. Devuelve True en caso afirmativo.
---noExplota :: CampoMinado -> Camino -> Bool
---noExplota cm c = sonDisjuntas (posicionesConMinas cm) (posiciones c)
+noExplota :: CampoMinado -> Camino -> Bool
+noExplota cm c = sonDisjuntas (posicionesConMinas cm) (posiciones c)
 
 -- Devuelve la posición en la que se encuentra un RAE al terminar de recorrer un camino.
 posicionFinal :: [Posicion] -> Posicion
@@ -133,5 +133,5 @@ caminoValido cm c = sonTodasValidas cm (posiciones c)
 
 -- Determina si un RAE, comenzando en la posición (1,1), al seguir el camino dado,
 -- llega a la posición (n,n) sin pisar ninguna mina.
---caminoDeSalida :: CampoMinado -> Camino -> Bool
---caminoDeSalida cm c = caminoValido cm c && noExplota cm c && posicionFinal (posiciones c) == (tamano cm, tamano cm)
+caminoDeSalida :: CampoMinado -> Camino -> Bool
+caminoDeSalida cm c = caminoValido cm c && noExplota cm c && posicionFinal (posiciones c) == (tamano cm, tamano cm)
