@@ -75,6 +75,7 @@ taf2 = [ [Derecha,       Abajo, Abajo],
          
          
 -- Parte A. Campos Minados
+
 -- Devuelve la nueva posicion de un RAE luego de realizar un desplazamiento.
 posicionNueva :: Posicion -> Desplazamiento -> Posicion
 posicionNueva (x,y) Arriba = (x - 1,y)
