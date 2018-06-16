@@ -147,3 +147,19 @@ caminoDeSalida cm c = caminoValido cm c && noExplota cm c && posicionFinal (posi
 -- llega a la posición (n,n) sin pisar ninguna mina y sin pasar dos veces por una misma posición.
 caminoDeSalidaSinRepetidos :: CampoMinado -> Camino -> Bool
 caminoDeSalidaSinRepetidos cm c = caminoDeSalida cm c && not(hayRepetidos (posiciones c))
+
+
+
+
+-- Parte B. Siga la flecha.
+-- Tableros estáticos
+
+-- Dado un tablero y una posición p, devuelve una lista que contiene las posiciones por las que pasará
+-- un AF si se lo coloca inicialmente sobre p. 
+recorrido :: TableroAF -> Posicion -> [Posicion]
+recorrido t (x,y) | posValida t (posicionNueva (x,y) (valor t (x,y))) = (x,y) : recorrido t (posicionNueva (x,y) (valor t (x,y)))
+                  | otherwise = [(x,y)]
+                  
+-- Dado un tablero y una posición p, determina si al colocar un AF en p, el AF escapará del tablero o entrará en un loop infinito.
+escapaDelTablero :: TableroAF -> Posicion -> Bool
+escapaDelTablero t (x,y) = not(hayRepetidos (take 100 (recorrido t (x,y))))
