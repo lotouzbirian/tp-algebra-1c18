@@ -162,4 +162,4 @@ recorrido t (x,y) | posValida t (posicionNueva (x,y) (valor t (x,y))) = (x,y) : 
                   
 -- Dado un tablero y una posición p, determina si al colocar un AF en p, el AF escapará del tablero o entrará en un loop infinito.
 escapaDelTablero :: TableroAF -> Posicion -> Bool
-escapaDelTablero t (x,y) = not(hayRepetidos (take 100 (recorrido t (x,y))))
+escapaDelTablero t (x,y) = not(hayRepetidos (take (fromInteger(tamano t) ^ 2 + 1) (recorrido t (x,y))))
