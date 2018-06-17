@@ -163,3 +163,22 @@ recorrido t (x,y) | posValida t (posicionNueva (x,y) (valor t (x,y))) = (x,y) : 
 -- Dado un tablero y una posición p, determina si al colocar un AF en p, el AF escapará del tablero o entrará en un loop infinito.
 escapaDelTablero :: TableroAF -> Posicion -> Bool
 escapaDelTablero t (x,y) = not(hayRepetidos (take (fromInteger(tamano t) ^ 2 + 1) (recorrido t (x,y))))
+
+-- Tableros dinámicos
+
+-- Dado un tablero, una posición y un desplazamiento, cambia el desplazamiento correspondiente a esa posición por el nuevo.
+cambiarPosicion :: TableroAF -> Posicion -> Desplazamiento -> TableroAF
+cambiarPosicion t (x,y) d | 
+
+-- Dado un tablero y una posición, devuelve un nuevo tablero con la posición nueva según el sentido horario.
+tableroNuevo :: TableroAF -> Posicion -> TableroAF
+tableroNuevo t (x,y) | valor t (x,y) == Arriba = cambiarPosicion t (x,y) Derecha
+                     | valor t (x,y) == Derecha = cambiarPosicion t (x,y) Abajo
+                     | valor t (x,y) == Abajo = cambiarPosicion t (x,y) Izquierda
+                     | valor t (x,y) == Izquierda = cambiarPosicion t (x,y) Arriba
+
+-- Dado un tablero y una posición p, devuelve cuantas veces tiene que desplazarse un AF para escapar
+-- del tablero si inicialmente lo colocamos en p.
+cantidadDePasosParaSalir :: TableroAF -> Posicion -> Integer
+cantidadDePasosParaSalir t (x,y) | not(posValida t (posicionNueva (x,y) (valor t (x,y)))) = 1
+                                 | otherwise = 1 + cantidadDePasosParaSalir (tableroNuevo t (x,y)) (posicionNueva (x,y) (valor t (x,y)))
