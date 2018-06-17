@@ -112,6 +112,7 @@ sonTodasValidas cm c | length c == 1 && posValida cm (head c) = True
                      | otherwise = False
 
 -- Crea una lista con todas las posiciones del campo minado que tienen minas.
+-- Esta conchuda es la que no logro descifar.
 posicionesConMinas :: CampoMinado -> Posicion -> [Posicion]
 posicionesConMinas cm (n,m) | n > tamano cm = []
                             | valor cm (n,m) && m <= tamano cm = (n,m) : posicionesConMinas cm (n,m + 1)
@@ -170,10 +171,15 @@ recorrido t (x,y) | posValida t (posicionNueva (x,y) (valor t (x,y))) = (x,y) : 
 escapaDelTablero :: TableroAF -> Posicion -> Bool
 escapaDelTablero t (x,y) = not(hayRepetidos (take (fromInteger(tamano t) ^ 2 + 1) (recorrido t (x,y))))
 
+--Creería que es suficiente checkear las primeras n^2+1 posiciones. Si el bicho dio n^2 pasos sin repetir significa que pasó
+--por todo el tablero, por lo que si el paso siguiente tampoco repite no le queda otra que haber salido del tablero.
+--¿Estoy razonando bien?
+
 -- Tableros dinámicos
 
--- 
---reemplazar :: [a] -> a -> a 
+--reemplazar :: [a] -> Integer -> a -> [a]
+-- Programar la funcion reemplazar. La idea es que tome una lista, un entero (n) y un elemento compatible con la lista (a) y haga
+-- lo siguiente; toma el n-ésimo elemento de la lista y lo reemplace por a.
 
 -- Dado un tablero, una posición y un desplazamiento, cambia el desplazamiento correspondiente a esa posición por el nuevo.
 --cambiarPosicion :: TableroAF -> Posicion -> Desplazamiento -> TableroAF
