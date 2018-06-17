@@ -177,7 +177,7 @@ escapaDelTablero t (x,y) = not(hayRepetidos (take (fromInteger(tamano t) ^ 2 + 1
 
 -- Dado un tablero, una posición y un desplazamiento, cambia el desplazamiento correspondiente a esa posición por el nuevo.
 --cambiarPosicion :: TableroAF -> Posicion -> Desplazamiento -> TableroAF
---cambiarPosicion t (x,y) d = reemplazar t (iesimo t x) (reemplazar (iesimo t x) y d)
+--cambiarPosicion t (x,y) d = reemplazar t x (reemplazar (iesimo t x) y d)
 
 -- Dado un tablero y una posición, devuelve un nuevo tablero con la posición nueva según el sentido horario.
 --tableroNuevo :: TableroAF -> Posicion -> TableroAF
