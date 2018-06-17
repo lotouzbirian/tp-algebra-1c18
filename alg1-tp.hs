@@ -71,6 +71,13 @@ taf2 = [ [Derecha,       Abajo, Abajo],
          [Arriba,    Izquierda, Abajo],
          [Izquierda, Izquierda, Izquierda] ]
          
+-- TableroAF de prueba
+taf3 :: TableroAF
+taf3 = [ [Derecha, Derecha, Derecha, Derecha],
+         [Arriba, Abajo, Izquierda, Arriba],
+         [Abajo, Izquierda, Derecha, Abajo],
+         [Arriba, Abajo, Arriba, Izquierda] ]
+         
          
          
          
@@ -118,8 +125,8 @@ sonDisjuntas c1 c2 | length c1 == 0 = True
                    | otherwise = sonDisjuntas (tail c1) c2
 
 -- Determina si un RAE recorre un camino sin pisar ninguna mina. Devuelve True en caso afirmativo.
-noExplota :: CampoMinado -> Camino -> Bool
-noExplota cm c = sonDisjuntas (posicionesConMinas cm) (posiciones c)
+--noExplota :: CampoMinado -> Camino -> Bool
+--noExplota cm c = sonDisjuntas (posicionesConMinas cm) (posiciones c)
 
 -- Devuelve la posición en la que se encuentra un RAE al terminar de recorrer un camino.
 posicionFinal :: [Posicion] -> Posicion
@@ -140,14 +147,13 @@ caminoValido cm c = sonTodasValidas cm (posiciones c)
 
 -- Determina si un RAE, comenzando en la posición (1,1), al seguir el camino dado,
 -- llega a la posición (n,n) sin pisar ninguna mina.
-caminoDeSalida :: CampoMinado -> Camino -> Bool
-caminoDeSalida cm c = caminoValido cm c && noExplota cm c && posicionFinal (posiciones c) == (tamano cm, tamano cm)
+--caminoDeSalida :: CampoMinado -> Camino -> Bool
+--caminoDeSalida cm c = caminoValido cm c && noExplota cm c && posicionFinal (posiciones c) == (tamano cm, tamano cm)
 
 -- Determina si un RAE, comenzando en la posición (1,1), al seguir el camino dado,
 -- llega a la posición (n,n) sin pisar ninguna mina y sin pasar dos veces por una misma posición.
-caminoDeSalidaSinRepetidos :: CampoMinado -> Camino -> Bool
-caminoDeSalidaSinRepetidos cm c = caminoDeSalida cm c && not(hayRepetidos (posiciones c))
-
+--caminoDeSalidaSinRepetidos :: CampoMinado -> Camino -> Bool
+--caminoDeSalidaSinRepetidos cm c = caminoDeSalida cm c && not(hayRepetidos (posiciones c))
 
 
 
@@ -166,19 +172,22 @@ escapaDelTablero t (x,y) = not(hayRepetidos (take (fromInteger(tamano t) ^ 2 + 1
 
 -- Tableros dinámicos
 
+-- 
+--reemplazar :: [a] -> a -> a 
+
 -- Dado un tablero, una posición y un desplazamiento, cambia el desplazamiento correspondiente a esa posición por el nuevo.
-cambiarPosicion :: TableroAF -> Posicion -> Desplazamiento -> TableroAF
-cambiarPosicion t (x,y) d | 
+--cambiarPosicion :: TableroAF -> Posicion -> Desplazamiento -> TableroAF
+--cambiarPosicion t (x,y) d = reemplazar t (iesimo t x) (reemplazar (iesimo t x) y d)
 
 -- Dado un tablero y una posición, devuelve un nuevo tablero con la posición nueva según el sentido horario.
-tableroNuevo :: TableroAF -> Posicion -> TableroAF
-tableroNuevo t (x,y) | valor t (x,y) == Arriba = cambiarPosicion t (x,y) Derecha
-                     | valor t (x,y) == Derecha = cambiarPosicion t (x,y) Abajo
-                     | valor t (x,y) == Abajo = cambiarPosicion t (x,y) Izquierda
-                     | valor t (x,y) == Izquierda = cambiarPosicion t (x,y) Arriba
+--tableroNuevo :: TableroAF -> Posicion -> TableroAF
+--tableroNuevo t (x,y) | valor t (x,y) == Arriba = cambiarPosicion t (x,y) Derecha
+--                     | valor t (x,y) == Derecha = cambiarPosicion t (x,y) Abajo
+--                     | valor t (x,y) == Abajo = cambiarPosicion t (x,y) Izquierda
+--                     | valor t (x,y) == Izquierda = cambiarPosicion t (x,y) Arriba
 
 -- Dado un tablero y una posición p, devuelve cuantas veces tiene que desplazarse un AF para escapar
 -- del tablero si inicialmente lo colocamos en p.
-cantidadDePasosParaSalir :: TableroAF -> Posicion -> Integer
-cantidadDePasosParaSalir t (x,y) | not(posValida t (posicionNueva (x,y) (valor t (x,y)))) = 1
-                                 | otherwise = 1 + cantidadDePasosParaSalir (tableroNuevo t (x,y)) (posicionNueva (x,y) (valor t (x,y)))
+--cantidadDePasosParaSalir :: TableroAF -> Posicion -> Integer
+--cantidadDePasosParaSalir t (x,y) | not(posValida t (posicionNueva (x,y) (valor t (x,y)))) = 1
+--                                 | otherwise = 1 + cantidadDePasosParaSalir (tableroNuevo t (x,y)) (posicionNueva (x,y) (valor t (x,y)))
