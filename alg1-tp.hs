@@ -177,7 +177,7 @@ escapaDelTablero t (x,y) = not(hayRepetidos (take (fromInteger(tamano t) ^ 2 + 1
 
 -- Tableros dinámicos
 
--- Esta última parte compila pero falta probarla.
+-- Esta última parte compila pero falta probarla más.
 
 -- Dados una lista, un entero n y un elemento del tipo de la lista x, reemplaza el n-ésimo elemento de la lista por x.
 reemplazar :: [a] -> Integer -> a -> [a]
