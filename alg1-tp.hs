@@ -111,13 +111,13 @@ sonTodasValidas cm c | length c == 1 && posValida cm (head c) = True
                      | posValida cm (head c) = sonTodasValidas cm (tail c)
                      | otherwise = False
 
--- Crea una lista con todas las posiciones del campo minado que tienen minas.
--- Esta conchuda es la que no logro descifar.
+-- Dados un campo minado y una posición (n,m), crea una lista con todas las posiciones que contienen minas empezando por (n,m).
+-- Recorre cada fila de izquierda a derecha y cuando termina una pasa a la siguiente.
 posicionesConMinas :: CampoMinado -> Posicion -> [Posicion]
 posicionesConMinas cm (n,m) | n > tamano cm = []
+                            | m > tamano cm = posicionesConMinas cm (n + 1,1)
                             | valor cm (n,m) && m <= tamano cm = (n,m) : posicionesConMinas cm (n,m + 1)
-                            | m <= tamano cm = posicionesConMinas cm (n,m + 1)
-                            | otherwise = posicionesConMinas cm (n + 1,1)
+                            | otherwise = posicionesConMinas cm (n,m + 1)
                           
 -- Decide si dos listas de posiciones tienen algún elemento en común. Devuelve False en caso afirmativo.
 sonDisjuntas :: [Posicion] -> [Posicion] -> Bool
@@ -126,8 +126,8 @@ sonDisjuntas c1 c2 | length c1 == 0 = True
                    | otherwise = sonDisjuntas (tail c1) c2
 
 -- Determina si un RAE recorre un camino sin pisar ninguna mina. Devuelve True en caso afirmativo.
---noExplota :: CampoMinado -> Camino -> Bool
---noExplota cm c = sonDisjuntas (posicionesConMinas cm) (posiciones c)
+noExplota :: CampoMinado -> Camino -> Bool
+noExplota cm c = sonDisjuntas (posicionesConMinas cm (1,1)) (posiciones c)
 
 -- Devuelve la posición en la que se encuentra un RAE al terminar de recorrer un camino.
 posicionFinal :: [Posicion] -> Posicion
@@ -140,6 +140,8 @@ hayRepetidos :: [Posicion] -> Bool
 hayRepetidos [] = False
 hayRepetidos (p:ps) | elem p ps = True
                     | otherwise = hayRepetidos ps
+                    
+
 
 -- Determina si un camino se mantiene dentro de los límites del tablero a lo largo de su trayectoria,
 -- asumiendo que se comenzará por la posición (1,1).
@@ -148,13 +150,14 @@ caminoValido cm c = sonTodasValidas cm (posiciones c)
 
 -- Determina si un RAE, comenzando en la posición (1,1), al seguir el camino dado,
 -- llega a la posición (n,n) sin pisar ninguna mina.
---caminoDeSalida :: CampoMinado -> Camino -> Bool
---caminoDeSalida cm c = caminoValido cm c && noExplota cm c && posicionFinal (posiciones c) == (tamano cm, tamano cm)
+caminoDeSalida :: CampoMinado -> Camino -> Bool
+caminoDeSalida cm c = caminoValido cm c && noExplota cm c && posicionFinal (posiciones c) == (tamano cm, tamano cm)
 
 -- Determina si un RAE, comenzando en la posición (1,1), al seguir el camino dado,
 -- llega a la posición (n,n) sin pisar ninguna mina y sin pasar dos veces por una misma posición.
---caminoDeSalidaSinRepetidos :: CampoMinado -> Camino -> Bool
---caminoDeSalidaSinRepetidos cm c = caminoDeSalida cm c && not(hayRepetidos (posiciones c))
+caminoDeSalidaSinRepetidos :: CampoMinado -> Camino -> Bool
+caminoDeSalidaSinRepetidos cm c = caminoDeSalida cm c && not(hayRepetidos (posiciones c))
+
 
 
 
@@ -171,13 +174,7 @@ recorrido t (x,y) | posValida t (posicionNueva (x,y) (valor t (x,y))) = (x,y) : 
 escapaDelTablero :: TableroAF -> Posicion -> Bool
 escapaDelTablero t (x,y) = not(hayRepetidos (take (fromInteger(tamano t) ^ 2 + 1) (recorrido t (x,y))))
 
---Creería que es suficiente checkear las primeras n^2+1 posiciones. Si el bicho dio n^2 pasos sin repetir significa que pasó
---por todo el tablero, por lo que si el paso siguiente tampoco repite no le queda otra que haber salido del tablero.
---¿Estoy razonando bien?
-
 -- Tableros dinámicos
-
--- Esta última parte compila pero falta probarla más.
 
 -- Dados una lista, un entero n y un elemento del tipo de la lista x, reemplaza el n-ésimo elemento de la lista por x.
 reemplazar :: [a] -> Integer -> a -> [a]
