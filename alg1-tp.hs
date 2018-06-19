@@ -71,12 +71,6 @@ taf2 = [ [Derecha,       Abajo, Abajo],
          [Arriba,    Izquierda, Abajo],
          [Izquierda, Izquierda, Izquierda] ]
          
--- TableroAF de prueba
-taf3 :: TableroAF
-taf3 = [ [Derecha, Derecha, Derecha, Derecha],
-         [Arriba, Abajo, Izquierda, Arriba],
-         [Abajo, Izquierda, Derecha, Abajo],
-         [Arriba, Abajo, Arriba, Izquierda] ]
          
          
          
