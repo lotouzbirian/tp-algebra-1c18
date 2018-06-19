@@ -110,7 +110,7 @@ sonTodasValidas cm c | length c == 1 && posValida cm (head c) = True
 posicionesConMinas :: CampoMinado -> Posicion -> [Posicion]
 posicionesConMinas cm (n,m) | n > tamano cm = []
                             | m > tamano cm = posicionesConMinas cm (n + 1,1)
-                            | valor cm (n,m) && m <= tamano cm = (n,m) : posicionesConMinas cm (n,m + 1)
+                            | valor cm (n,m) : posicionesConMinas cm (n,m + 1)
                             | otherwise = posicionesConMinas cm (n,m + 1)
                           
 -- Decide si dos listas de posiciones tienen algún elemento en común. Devuelve False en caso afirmativo.
@@ -125,7 +125,6 @@ noExplota cm c = sonDisjuntas (posicionesConMinas cm (1,1)) (posiciones c)
 
 -- Devuelve la posición en la que se encuentra un RAE al terminar de recorrer un camino.
 posicionFinal :: [Posicion] -> Posicion
-posicionFinal [] = (1,1)
 posicionFinal c | length c == 1 = head c
                 | otherwise = posicionFinal (tail c)
 
