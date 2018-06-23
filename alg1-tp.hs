@@ -151,9 +151,21 @@ caminoDeSalida cm c = caminoValido cm c && noExplota cm c && posicionFinal (posi
 caminoDeSalidaSinRepetidos :: CampoMinado -> Camino -> Bool
 caminoDeSalidaSinRepetidos cm c = caminoDeSalida cm c && not(hayRepetidos (posiciones c))
 
+salidasEnKDesp :: CampoMinado -> Integer -> Conjunto Camino
 
+salidasEnKDesp cm k = caminosDeLongitudK (permutaciones [Arriba, Abajo, Derecha, Izquierda] k) cm
 
+caminosDeLongitudK :: Conjunto Camino -> CampoMinado -> Conjunto Camino
 
+caminosDeLongitudK [] _ = []
+caminosDeLongitudK (x:xs) cm | (caminoValido cm x) && (caminoDeSalida cm x) = x : caminosDeLongitudK xs cm
+                             | otherwise = caminosDeLongitudK xs cm
+
+-- TO DO y LISTO!!!!!!!!
+
+permutaciones :: Conjunto a -> Integer -> [[a]] 
+
+permutaciones a k = [[]]
 -- Parte B. Siga la flecha.
 -- Tableros estáticos
 
@@ -190,3 +202,4 @@ tableroNuevo t (x,y) | valor t (x,y) == Arriba = cambiarPosicion t (x,y) Derecha
 cantidadDePasosParaSalir :: TableroAF -> Posicion -> Integer
 cantidadDePasosParaSalir t (x,y) | not(posValida t (posicionNueva (x,y) (valor t (x,y)))) = 1
                                  | otherwise = 1 + cantidadDePasosParaSalir (tableroNuevo t (x,y)) (posicionNueva (x,y) (valor t (x,y)))
+
