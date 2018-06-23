@@ -133,7 +133,27 @@ hayRepetidos :: [Posicion] -> Bool
 hayRepetidos [] = False
 hayRepetidos (p:ps) | elem p ps = True
                     | otherwise = hayRepetidos ps
-                    
+
+-- Toma un elemento n de tipo a y una lista de listas de tipo a, y agrega n a cada una de las listas.
+agregarATodas :: a -> [[a]] -> [[a]]
+agregarATodas _ [] = []
+agregarATodas n (x:xs) = (n:x) : (agregarATodas n xs)
+
+-- Toma una lista de elementos de tipo a y una listas de listas de tipo a, y agrega cada elemento de la primera a cada lista de la segunda.
+agregarTodosATodas :: [a] -> [[a]] -> [[a]] 
+agregarTodosATodas [] _ = []
+agregarTodosATodas (x:xs) yys = (agregarATodas x yys) ++ (agregarTodosATodas xs yys)
+
+-- Dado un conjunto y un entero k, devuelve todas las combinaciones de longitud k que pueden formarse con los elementos del conjunto.
+variaciones :: Conjunto a -> Integer -> Conjunto [a]
+variaciones _ 0 = [[]]
+variaciones xs k = agregarTodosATodas xs (variaciones xs (k - 1))
+
+-- Dado un conjunto de caminos y un campo minado, devuelve todos los caminos validos del conjunto cuya posición final es (n,n).
+caminosDeLongitudK :: Conjunto Camino -> CampoMinado -> Conjunto Camino
+caminosDeLongitudK [] _ = []
+caminosDeLongitudK (x:xs) cm | (caminoValido cm x) && (caminoDeSalida cm x) = x : caminosDeLongitudK xs cm
+                             | otherwise = caminosDeLongitudK xs cm
 
 
 -- Determina si un camino se mantiene dentro de los límites del tablero a lo largo de su trayectoria,
@@ -151,31 +171,14 @@ caminoDeSalida cm c = caminoValido cm c && noExplota cm c && posicionFinal (posi
 caminoDeSalidaSinRepetidos :: CampoMinado -> Camino -> Bool
 caminoDeSalidaSinRepetidos cm c = caminoDeSalida cm c && not(hayRepetidos (posiciones c))
 
+-- Dados un campo minado y un número natural k, devuelve el conjunto de todos los caminos de
+-- longitud k que lleven a un RAE desde (1,1) hasta (n,n), sin pisar ninguna mina.
 salidasEnKDesp :: CampoMinado -> Integer -> Conjunto Camino
-
 salidasEnKDesp cm k = caminosDeLongitudK (variaciones [Arriba, Abajo, Derecha, Izquierda] k) cm
 
-caminosDeLongitudK :: Conjunto Camino -> CampoMinado -> Conjunto Camino
 
-caminosDeLongitudK [] _ = []
-caminosDeLongitudK (x:xs) cm | (caminoValido cm x) && (caminoDeSalida cm x) = x : caminosDeLongitudK xs cm
-                             | otherwise = caminosDeLongitudK xs cm
 
-variaciones :: Conjunto a -> Integer -> Conjunto [a]
 
-variaciones _ 0 = [[]]
-
-variaciones xs k = agregarTodosATodas xs (variaciones xs (k - 1))
-
-agregarTodosATodas :: a -> [[a]] -> [[a]] 
-
-agregarTodosATodas (x:xs) yys = (agregarATodas x yys) ++ (agregarTodosATodas xs yys)
-
-agregarATodas :: [a] -> Conjunto [a] -> [[a]]
-
-agregarATodas _ [] = []
-
-agregarATodas n (x:xs) = (n:x) : (agregarATodas n xs)
 
 
 -- Parte B. Siga la flecha.
