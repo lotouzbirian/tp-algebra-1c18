@@ -153,7 +153,7 @@ caminoDeSalidaSinRepetidos cm c = caminoDeSalida cm c && not(hayRepetidos (posic
 
 salidasEnKDesp :: CampoMinado -> Integer -> Conjunto Camino
 
-salidasEnKDesp cm k = caminosDeLongitudK (permutaciones [Arriba, Abajo, Derecha, Izquierda] k) cm
+salidasEnKDesp cm k = caminosDeLongitudK (variaciones [Arriba, Abajo, Derecha, Izquierda] k) cm
 
 caminosDeLongitudK :: Conjunto Camino -> CampoMinado -> Conjunto Camino
 
@@ -161,11 +161,23 @@ caminosDeLongitudK [] _ = []
 caminosDeLongitudK (x:xs) cm | (caminoValido cm x) && (caminoDeSalida cm x) = x : caminosDeLongitudK xs cm
                              | otherwise = caminosDeLongitudK xs cm
 
--- TO DO y LISTO!!!!!!!!
+variaciones :: Conjunto a -> Integer -> Conjunto [a]
 
-permutaciones :: Conjunto a -> Integer -> [[a]] 
+variaciones _ 0 = [[]]
 
-permutaciones a k = [[]]
+variaciones xs k = agregarTodosATodas xs (variaciones xs (k - 1))
+
+agregarTodosATodas :: a -> [[a]] -> [[a]] 
+
+agregarTodosATodas (x:xs) yys = (agregarATodas x yys) ++ (agregarTodosATodas xs yys)
+
+agregarATodas :: [a] -> Conjunto [a] -> [[a]]
+
+agregarATodas _ [] = []
+
+agregarATodas n (x:xs) = (n:x) : (agregarATodas n xs)
+
+
 -- Parte B. Siga la flecha.
 -- Tableros estáticos
 
