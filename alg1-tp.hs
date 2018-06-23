@@ -70,6 +70,7 @@ taf2 :: TableroAF
 taf2 = [ [Derecha,       Abajo, Abajo],
          [Arriba,    Izquierda, Abajo],
          [Izquierda, Izquierda, Izquierda] ]
+        
          
          
          
@@ -78,6 +79,7 @@ taf2 = [ [Derecha,       Abajo, Abajo],
 -- Parte A. Campos Minados
 
 -- Devuelve la nueva posicion de un RAE luego de realizar un desplazamiento.
+-- Esta función también se utiliza en la parte b.
 posicionNueva :: Posicion -> Desplazamiento -> Posicion
 posicionNueva (x,y) Arriba = (x - 1,y)
 posicionNueva (x,y) Abajo = (x + 1,y)
@@ -88,7 +90,6 @@ posicionNueva (x,y) Derecha = (x,y + 1)
 posicion :: Camino -> Integer -> Posicion
 posicion _ 0 = (1,1)
 posicion (c:cs) n = posicionNueva (posicion (c:cs) (n-1)) (iesimo (c:cs) n)
-
 
 -- Crea una lista con las sucesivas posiciones que toma un RAE al recorrer un camino a partir de cierto desplazamiento.
 posicionesDesde :: Camino -> Integer -> [Posicion]
@@ -129,6 +130,7 @@ posicionFinal c | length c == 1 = head c
                 | otherwise = posicionFinal (tail c)
 
 -- Determina si una lista de posiciones tiene elementos repetidos.
+-- Esta función también se utiliza en la parte b.
 hayRepetidos :: [Posicion] -> Bool
 hayRepetidos [] = False
 hayRepetidos (p:ps) | elem p ps = True
@@ -184,13 +186,13 @@ salidasEnKDesp cm k = caminosDeLongitudK (variaciones [Arriba, Abajo, Derecha, I
 -- Parte B. Siga la flecha.
 -- Tableros estáticos
 
--- Dado un tablero y una posición p, devuelve una lista que contiene las posiciones por las que pasará
+-- Dados un tablero y una posición p, devuelve una lista que contiene las posiciones por las que pasará
 -- un AF si se lo coloca inicialmente sobre p. 
 recorrido :: TableroAF -> Posicion -> [Posicion]
 recorrido t (x,y) | posValida t (posicionNueva (x,y) (valor t (x,y))) = (x,y) : recorrido t (posicionNueva (x,y) (valor t (x,y)))
                   | otherwise = [(x,y)]
                   
--- Dado un tablero y una posición p, determina si al colocar un AF en p, el AF escapará del tablero o entrará en un loop infinito.
+-- Dados un tablero y una posición p, determina si al colocar un AF en p, el AF escapará del tablero o entrará en un loop infinito.
 escapaDelTablero :: TableroAF -> Posicion -> Bool
 escapaDelTablero t (x,y) = not(hayRepetidos (take (fromInteger(tamano t) ^ 2 + 1) (recorrido t (x,y))))
 
@@ -201,20 +203,19 @@ reemplazar :: [a] -> Integer -> a -> [a]
 reemplazar xs n x | n == 1 = x : tail xs
                   | otherwise = head xs : reemplazar (tail xs) (n - 1) x
 
--- Dado un tablero, una posición y un desplazamiento, cambia el desplazamiento correspondiente a esa posición por el nuevo.
+-- Dados un tablero, una posición y un desplazamiento, cambia el desplazamiento correspondiente a esa posición por el nuevo.
 cambiarPosicion :: TableroAF -> Posicion -> Desplazamiento -> TableroAF
 cambiarPosicion t (x,y) d = reemplazar t x (reemplazar (iesimo t x) y d)
 
--- Dado un tablero y una posición, devuelve un nuevo tablero con la posición nueva según el sentido horario.
+-- Dados un tablero y una posición, devuelve un nuevo tablero con la posición nueva según el sentido horario.
 tableroNuevo :: TableroAF -> Posicion -> TableroAF
 tableroNuevo t (x,y) | valor t (x,y) == Arriba = cambiarPosicion t (x,y) Derecha
                      | valor t (x,y) == Derecha = cambiarPosicion t (x,y) Abajo
                      | valor t (x,y) == Abajo = cambiarPosicion t (x,y) Izquierda
                      | valor t (x,y) == Izquierda = cambiarPosicion t (x,y) Arriba
 
--- Dado un tablero y una posición p, devuelve cuantas veces tiene que desplazarse un AF para escapar
+-- Dados un tablero y una posición p, devuelve cuantas veces tiene que desplazarse un AF para escapar
 -- del tablero si inicialmente lo colocamos en p.
 cantidadDePasosParaSalir :: TableroAF -> Posicion -> Integer
 cantidadDePasosParaSalir t (x,y) | not(posValida t (posicionNueva (x,y) (valor t (x,y)))) = 1
                                  | otherwise = 1 + cantidadDePasosParaSalir (tableroNuevo t (x,y)) (posicionNueva (x,y) (valor t (x,y)))
-
