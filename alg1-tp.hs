@@ -110,7 +110,7 @@ sonTodasValidas cm c | length c == 1 && posValida cm (head c) = True
 posicionesConMinas :: CampoMinado -> Posicion -> [Posicion]
 posicionesConMinas cm (n,m) | n > tamano cm = []
                             | m > tamano cm = posicionesConMinas cm (n + 1,1)
-                            | valor cm (n,m) : posicionesConMinas cm (n,m + 1)
+                            | valor cm (n,m) = (n,m) : posicionesConMinas cm (n,m + 1)
                             | otherwise = posicionesConMinas cm (n,m + 1)
                           
 -- Decide si dos listas de posiciones tienen algún elemento en común. Devuelve False en caso afirmativo.
