@@ -154,7 +154,7 @@ variaciones xs k = agregarTodosATodas xs (variaciones xs (k - 1))
 -- Dado un conjunto de caminos y un campo minado, devuelve todos los caminos validos del conjunto cuya posición final es (n,n).
 caminosDeLongitudK :: Conjunto Camino -> CampoMinado -> Conjunto Camino
 caminosDeLongitudK [] _ = []
-caminosDeLongitudK (x:xs) cm | (caminoValido cm x) && (caminoDeSalida cm x) = x : caminosDeLongitudK xs cm
+caminosDeLongitudK (x:xs) cm | caminoDeSalida cm x = x : caminosDeLongitudK xs cm
                              | otherwise = caminosDeLongitudK xs cm
 
 
